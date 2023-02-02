@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto, UpdatePasswordDto, User } from 'src/types';
+import { User } from 'src/types';
 import { DBEntity } from './DBentities';
 import { v4 as uuidv4 } from 'uuid';
+import { UpdatePasswordDto, CreateUserDto } from 'src/routes/user/dto/userDto';
 
 @Injectable()
 export class DBUsers extends DBEntity<User, UpdatePasswordDto, CreateUserDto> {
@@ -15,5 +16,21 @@ export class DBUsers extends DBEntity<User, UpdatePasswordDto, CreateUserDto> {
     };
     this.entities.push(created);
     return created;
+  }
+
+  async update(id: string, updateDto: UpdatePasswordDto) {
+    const index = this.entities.findIndex((el) => el.id === id);
+    if (index >= 0) {
+      const changed = {
+        ...this.entities[index],
+
+        password: updateDto.newPassword,
+        updatedAt: Date.now(),
+        version: this.entities[index].version + 1,
+      };
+
+      this.entities.splice(index, 1, changed);
+      return changed;
+    }
   }
 }
