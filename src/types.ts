@@ -7,16 +7,6 @@ export interface User {
   updatedAt: number; // timestamp of last update
 }
 
-export interface CreateUserDto {
-  login: string;
-  password: string;
-}
-
-export interface UpdatePasswordDto {
-  oldPassword: string; // previous password
-  newPassword: string; // new password
-}
-
 export interface Artist {
   id: string; // uuid v4
   name: string;
