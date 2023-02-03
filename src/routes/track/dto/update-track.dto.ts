@@ -7,11 +7,11 @@ export class UpdateTrackDto {
 
   @IsOptional()
   @IsString()
-  readonly artistId: string;
+  readonly artistId: string | null;
 
   @IsOptional()
   @IsString()
-  readonly albumId: string;
+  readonly albumId: string | null;
 
   @IsOptional()
   @IsInt()

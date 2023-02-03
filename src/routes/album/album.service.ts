@@ -39,6 +39,15 @@ export class AlbumService {
   async delete(uuid: string) {
     const entry = await this.findOne(uuid);
     const query = this.db.albums.delete(entry.id);
+    const tracks = this.db.tracks.findMany({ key: 'albumId', equals: uuid });
+
+    for (const track of tracks) {
+      await this.db.tracks.update(track.id, {
+        ...track,
+        albumId: null,
+      });
+    }
+
     return query;
   }
 
