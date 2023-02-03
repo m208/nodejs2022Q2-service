@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { DBInMemory } from 'src/db/db.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -9,6 +13,14 @@ export class AlbumService {
   constructor(private db: DBInMemory) {}
 
   async create(dto: CreateAlbumDto) {
+    if (dto.artistId !== null) {
+      const artist = this.db.artists.findOne(dto.artistId);
+
+      if (!artist) {
+        throw new BadRequestException('This Artist not existed');
+      }
+    }
+
     return this.db.albums.create(dto);
   }
 
