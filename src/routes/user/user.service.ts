@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ForbiddenException } from '@nestjs/common/exceptions';
 import { DBInMemory } from 'src/db/db.service';
-import { CreateUserDto, UpdatePasswordDto } from './dto/userDto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdatePasswordDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {

@@ -7,7 +7,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
-import { User } from 'src/types';
+import { IUser } from 'src/types';
 
 import { Delete, HttpCode, Put } from '@nestjs/common/decorators';
 import { UpdateTracDto, CreateTrackDto } from './dto/trackDto';
@@ -22,7 +22,7 @@ export class TrackController {
   }
 
   @Get()
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<IUser[]> {
     return this.tracksService.findAll();
   }
 

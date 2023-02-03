@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/types';
+import { IUser } from 'src/types';
 import { DBEntity } from './DBentities';
 import { v4 as uuidv4 } from 'uuid';
-import { UpdatePasswordDto, CreateUserDto } from 'src/routes/user/dto/userDto';
+import { UpdatePasswordDto } from 'src/routes/user/dto/update-user.dto';
+import { CreateUserDto } from 'src/routes/user/dto/create-user.dto';
 
 @Injectable()
-export class DBUsers extends DBEntity<User, UpdatePasswordDto, CreateUserDto> {
+export class DBUsers extends DBEntity<IUser, UpdatePasswordDto, CreateUserDto> {
   async create(dto: CreateUserDto) {
-    const created: User = {
+    const created: IUser = {
       ...dto,
       id: uuidv4(),
       createdAt: Date.now(),
