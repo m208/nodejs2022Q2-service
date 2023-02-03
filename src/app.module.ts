@@ -10,6 +10,8 @@ import { UserService } from './routes/user/user.service';
 import { TrackService } from './routes/track/track.service';
 import { ArtistController } from './routes/artist/artist.controller';
 import { ArtistService } from './routes/artist/artist.service';
+import { AlbumController } from './routes/album/album.controller';
+import { AlbumService } from './routes/album/album.service';
 
 @Module({
   imports: [
@@ -23,7 +25,15 @@ import { ArtistService } from './routes/artist/artist.service';
     UserController,
     TrackController,
     ArtistController,
+    AlbumController,
   ],
-  providers: [AppService, UserService, DBInMemory, TrackService, ArtistService],
+  providers: [
+    AppService,
+    UserService,
+    DBInMemory,
+    TrackService,
+    ArtistService,
+    AlbumService,
+  ],
 })
 export class AppModule {}
