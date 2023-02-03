@@ -8,6 +8,8 @@ import { DBInMemory } from './db/db.service';
 import { UserModule } from './routes/user/user.module';
 import { UserService } from './routes/user/user.service';
 import { TrackService } from './routes/track/track.service';
+import { ArtistController } from './routes/artist/artist.controller';
+import { ArtistService } from './routes/artist/artist.service';
 
 @Module({
   imports: [
@@ -16,7 +18,12 @@ import { TrackService } from './routes/track/track.service';
     }),
     UserModule,
   ],
-  controllers: [AppController, UserController, TrackController],
-  providers: [AppService, UserService, DBInMemory, TrackService],
+  controllers: [
+    AppController,
+    UserController,
+    TrackController,
+    ArtistController,
+  ],
+  providers: [AppService, UserService, DBInMemory, TrackService, ArtistService],
 })
 export class AppModule {}
