@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { Track } from 'src/types';
+
 import { DBEntity } from './DBentities';
 import { v4 as uuidv4 } from 'uuid';
-import { UpdateTracDto, CreateTrackDto } from 'src/routes/track/dto/trackDto';
+import { CreateTrackDto } from 'src/routes/track/dto/create-track.dto';
+import { UpdateTrackDto } from 'src/routes/track/dto/update-track.dto';
+import { Track } from 'src/routes/user/entities/track.entity';
 
 @Injectable()
-export class DBTracks extends DBEntity<Track, UpdateTracDto, CreateTrackDto> {
+export class DBTracks extends DBEntity<Track, UpdateTrackDto, CreateTrackDto> {
   async create(dto: CreateTrackDto) {
     const created: Track = {
       ...dto,

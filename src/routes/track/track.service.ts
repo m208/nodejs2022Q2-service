@@ -1,38 +1,38 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { DBInMemory } from 'src/db/db.service';
-import { CreateTrackDto, UpdateTracDto } from './dto/trackDto';
+import { CreateTrackDto } from './dto/create-track.dto';
+import { UpdateTrackDto } from './dto/update-track.dto';
 
 @Injectable()
 export class TrackService {
   constructor(private db: DBInMemory) {}
 
   async create(userDto: CreateTrackDto) {
-    const query = await this.db.tracks.create(userDto);
-    return query;
+    return this.db.tracks.create(userDto);
   }
 
   async findAll() {
-    return this.db.users.findAll();
+    return this.db.tracks.findAll();
   }
 
   async findOne(uuid: string) {
-    const user = this.db.tracks.findOne(uuid);
-    if (!user) {
-      throw new NotFoundException('User not found');
+    const entry = this.db.tracks.findOne(uuid);
+    if (!entry) {
+      throw new NotFoundException('Track not found');
     }
-    return user;
+    return entry;
   }
 
   async delete(uuid: string) {
-    const user = await this.findOne(uuid);
-    const query = this.db.tracks.delete(user.id);
+    const entry = await this.findOne(uuid);
+    const query = this.db.tracks.delete(entry.id);
     return query;
   }
 
-  async update(id: string, userDto: UpdateTracDto) {
-    const user = await this.findOne(id);
-    const query = await this.db.tracks.update(user.id, userDto);
+  async update(id: string, userDto: UpdateTrackDto) {
+    const entry = await this.findOne(id);
+    const query = await this.db.tracks.update(entry.id, userDto);
     return query;
   }
 }
