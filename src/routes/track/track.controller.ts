@@ -10,7 +10,7 @@ import { TrackService } from './track.service';
 import { Delete, HttpCode, Put } from '@nestjs/common/decorators';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { Track } from '../user/entities/track.entity';
+import { Track } from './entities/track.entity';
 import { ApiResponse, ApiTags, ApiOperation } from '@nestjs/swagger';
 
 const docs = {
@@ -33,7 +33,7 @@ export class TrackController {
   @ApiOperation({ summary: `Get all ${docs.entity}s` })
   @ApiResponse({ status: 200, type: [docs.type] })
   @Get()
-  async findAll(): Promise<Track[]> {
+  async findAll() {
     return this.tracksService.findAll();
   }
 

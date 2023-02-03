@@ -4,7 +4,7 @@ import { DBEntity } from './DBentities';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateTrackDto } from 'src/routes/track/dto/create-track.dto';
 import { UpdateTrackDto } from 'src/routes/track/dto/update-track.dto';
-import { Track } from 'src/routes/user/entities/track.entity';
+import { Track } from 'src/routes/track/entities/track.entity';
 
 @Injectable()
 export class DBTracks extends DBEntity<Track, UpdateTrackDto, CreateTrackDto> {

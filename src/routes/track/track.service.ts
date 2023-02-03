@@ -8,8 +8,8 @@ import { UpdateTrackDto } from './dto/update-track.dto';
 export class TrackService {
   constructor(private db: DBInMemory) {}
 
-  async create(userDto: CreateTrackDto) {
-    return this.db.tracks.create(userDto);
+  async create(dto: CreateTrackDto) {
+    return this.db.tracks.create(dto);
   }
 
   async findAll() {
@@ -30,9 +30,9 @@ export class TrackService {
     return query;
   }
 
-  async update(id: string, userDto: UpdateTrackDto) {
+  async update(id: string, dto: UpdateTrackDto) {
     const entry = await this.findOne(id);
-    const query = await this.db.tracks.update(entry.id, userDto);
+    const query = await this.db.tracks.update(entry.id, dto);
     return query;
   }
 }
