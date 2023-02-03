@@ -13,7 +13,7 @@ export class DBUsers extends DBEntity<IUser, UpdatePasswordDto, CreateUserDto> {
       id: uuidv4(),
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      version: 0,
+      version: 1,
     };
     this.entities.push(created);
     return created;

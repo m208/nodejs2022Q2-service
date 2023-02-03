@@ -1,7 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import { IUser } from 'src/types';
 
 export class User implements IUser {
+  constructor(partial: Partial<User>) {
+    Object.assign(this, partial);
+  }
+
   @ApiProperty({
     example: 'ffcbc50b-80d8-43d0-aed4-4de49f883775',
     description: 'User id: uuid v4',
@@ -12,6 +17,7 @@ export class User implements IUser {
   login: string;
 
   @ApiProperty({ example: '12345678', description: 'Password' })
+  @Exclude()
   password: string;
 
   @ApiProperty({

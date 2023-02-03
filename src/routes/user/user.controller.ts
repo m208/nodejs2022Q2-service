@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Param,
@@ -9,13 +10,19 @@ import {
 import { UserService } from './user.service';
 
 import { UpdatePasswordDto } from './dto/update-user.dto';
-import { Delete, HttpCode, Put } from '@nestjs/common/decorators';
+import {
+  Delete,
+  HttpCode,
+  Put,
+  UseInterceptors,
+} from '@nestjs/common/decorators';
 import { User } from './user.model';
 import { ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 
 @ApiTags('Users')
 @Controller('user')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(private usersService: UserService) {}
 
@@ -41,7 +48,8 @@ export class UserController {
     type: User,
   })
   async findOne(@Param('id', ParseUUIDPipe) uuid: string) {
-    return this.usersService.findOne(uuid);
+    const user = await this.usersService.findOne(uuid);
+    return new User({ ...user });
   }
 
   @ApiOperation({ summary: 'Update user by ID' })
