@@ -12,10 +12,9 @@ async function bootstrap() {
     .setTitle('Home Library Service')
     .setDescription('Home music library service')
     .setVersion('1.0.0')
-    .addTag('user')
     .build();
   const docs = SwaggerModule.createDocument(app, docsConfig);
-  SwaggerModule.setup('/api/docs', app, docs);
+  SwaggerModule.setup('/doc', app, docs);
 
   app.useGlobalPipes(new ValidationPipe());
 
