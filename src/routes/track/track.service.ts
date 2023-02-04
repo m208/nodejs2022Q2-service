@@ -27,6 +27,9 @@ export class TrackService {
   async delete(uuid: string) {
     const entry = await this.findOne(uuid);
     const query = this.db.tracks.delete(entry.id);
+
+    this.db.favorites.track.removeItem(uuid);
+
     return query;
   }
 

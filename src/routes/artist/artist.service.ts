@@ -40,6 +40,8 @@ export class ArtistService {
       });
     }
 
+    this.db.favorites.artist.removeItem(uuid);
+
     return query;
   }
 

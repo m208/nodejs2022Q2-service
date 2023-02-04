@@ -51,6 +51,8 @@ export class AlbumService {
       });
     }
 
+    this.db.favorites.album.removeItem(uuid);
+
     return query;
   }
 
