@@ -28,7 +28,10 @@ export class ArtistService {
     const entry = await this.findOne(uuid);
 
     const query = this.db.artists.delete(entry.id);
-    const tracks = this.db.tracks.findMany({ key: 'artistId', equals: uuid });
+    const tracks = await this.db.tracks.findMany({
+      key: 'artistId',
+      equals: uuid,
+    });
 
     for (const track of tracks) {
       await this.db.tracks.update(track.id, {

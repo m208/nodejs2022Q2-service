@@ -3,9 +3,13 @@ import { Injectable } from '@nestjs/common';
 interface Options<T, K extends keyof T> {
   key: K;
   equals?: T[K];
+  equalsAnyOf?: T[K][];
 }
 type OptionsEquals<T, K extends keyof T> = Required<
   Pick<Options<T, K>, 'key' | 'equals'>
+>;
+type OptionsEqualsAnyOf<T, K extends keyof T> = Required<
+  Pick<Options<T, K>, 'key' | 'equalsAnyOf'>
 >;
 
 @Injectable()
@@ -18,9 +22,25 @@ export abstract class DBEntity<
 
   abstract create(createDto: CreateDTO): Promise<Entity>;
 
-  findMany<K extends keyof Entity>(
+  async findMany<K extends keyof Entity>(
     options: OptionsEquals<Entity, K>,
-  ): Array<Entity> {
+  ): Promise<Entity[]>;
+  async findMany<K extends keyof Entity>(
+    option: OptionsEqualsAnyOf<Entity, K>,
+  ): Promise<Entity[]>;
+  async findMany<K extends keyof Entity>(): Promise<Entity[]>;
+
+  async findMany<K extends keyof Entity>(
+    options?: Options<Entity, K>,
+  ): Promise<Entity[]> {
+    if (options.equalsAnyOf) {
+      return (
+        [...this.entities].filter((entity) =>
+          options.equalsAnyOf.includes(entity[options.key]),
+        ) ?? null
+      );
+    }
+
     return (
       [...this.entities].filter(
         (entity) => entity[options.key] === options.equals,
