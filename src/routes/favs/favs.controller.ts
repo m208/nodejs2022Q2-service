@@ -26,7 +26,11 @@ export class FavoritesController {
 
   @Get()
   @ApiOperation({ summary: `Get all ${docs.entity}` })
-  @ApiResponse({ status: 200, description: `All ${docs.entity}`, type: [docs.type] })
+  @ApiResponse({
+    status: 200,
+    description: `All ${docs.entity}`,
+    type: [docs.type],
+  })
   async findAll() {
     return this.favsService.getAllFavs();
   }

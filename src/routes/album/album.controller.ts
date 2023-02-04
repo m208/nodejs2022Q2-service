@@ -1,10 +1,23 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { Delete, HttpCode, Put } from '@nestjs/common/decorators';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
-import { ApiResponse, ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiResponse,
+  ApiTags,
+  ApiOperation,
+  ApiCreatedResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
 
 const docs = {
   entity: 'Album',
@@ -18,7 +31,7 @@ export class AlbumController {
 
   @Post()
   @ApiOperation({ summary: `Create ${docs.entity}` })
-  @ApiResponse({ status: 201, description: `${docs.entity} created`, type: docs.type })
+  @ApiCreatedResponse({ description: `${docs.entity} create`, type: docs.type })
   @ApiResponse({ status: 400, description: 'Required fields missing' })
   async create(@Body() dto: CreateAlbumDto) {
     return this.albumService.create(dto);
@@ -26,14 +39,14 @@ export class AlbumController {
 
   @Get()
   @ApiOperation({ summary: `Get all ${docs.entity}s` })
-  @ApiResponse({ status: 200, description: `All ${docs.entity}s`, type: [docs.type] })
+  @ApiOkResponse({ description: `All ${docs.entity}s`, type: [docs.type] })
   async findAll() {
     return this.albumService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({ summary: `Get ${docs.entity} by ID` })
-  @ApiResponse({ status: 200, description: 'The found record', type: docs.type })
+  @ApiOkResponse({ description: 'The found record', type: docs.type })
   @ApiResponse({ status: 400, description: 'Invalid id (not uuid)' })
   @ApiResponse({ status: 404, description: `${docs.entity} not exist` })
   async findOne(@Param('id', ParseUUIDPipe) uuid: string) {
@@ -42,10 +55,13 @@ export class AlbumController {
 
   @Put(':id')
   @ApiOperation({ summary: `Update ${docs.entity} by ID` })
-  @ApiResponse({ status: 200, description: `${docs.entity} updated`, type: docs.type })
+  @ApiOkResponse({ description: `${docs.entity} updated`, type: docs.type })
   @ApiResponse({ status: 400, description: 'Invalid id (not uuid)' })
   @ApiResponse({ status: 404, description: `${docs.entity} not exist` })
-  async update(@Body() dto: UpdateAlbumDto, @Param('id', ParseUUIDPipe) uuid: string) {
+  async update(
+    @Body() dto: UpdateAlbumDto,
+    @Param('id', ParseUUIDPipe) uuid: string,
+  ) {
     return this.albumService.update(uuid, dto);
   }
 

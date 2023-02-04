@@ -121,7 +121,7 @@ paths:
               $ref: "#/components/schemas/CreateTrackDto"
       responses:
         201:
-          description: "Track created"
+          description: "Track create"
           content:
             application/json:
               schema:
@@ -227,7 +227,7 @@ paths:
               $ref: "#/components/schemas/CreateArtistDto"
       responses:
         201:
-          description: "Artist created"
+          description: "Artist create"
           content:
             application/json:
               schema:
@@ -333,7 +333,7 @@ paths:
               $ref: "#/components/schemas/CreateAlbumDto"
       responses:
         201:
-          description: "Album created"
+          description: "Album create"
           content:
             application/json:
               schema:

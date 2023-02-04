@@ -10,7 +10,12 @@ import {
 import { UserService } from './user.service';
 
 import { UpdatePasswordDto } from './dto/update-user.dto';
-import { Delete, HttpCode, Put, UseInterceptors } from '@nestjs/common/decorators';
+import {
+  Delete,
+  HttpCode,
+  Put,
+  UseInterceptors,
+} from '@nestjs/common/decorators';
 import { User } from './user.model';
 import { ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';

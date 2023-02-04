@@ -1,10 +1,24 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
 import { TrackService } from './track.service';
 import { Delete, HttpCode, Put } from '@nestjs/common/decorators';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { Track } from './entities/track.entity';
-import { ApiResponse, ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiResponse,
+  ApiTags,
+  ApiOperation,
+  ApiCreatedResponse,
+  ApiBadRequestResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
 
 const docs = {
   entity: 'Track',
@@ -18,22 +32,22 @@ export class TrackController {
 
   @Post()
   @ApiOperation({ summary: `Create ${docs.entity}` })
-  @ApiResponse({ status: 201, description: `${docs.entity} created`, type: docs.type })
-  @ApiResponse({ status: 400, description: 'Required fields missing' })
+  @ApiCreatedResponse({ description: `${docs.entity} create`, type: docs.type })
+  @ApiBadRequestResponse({ description: 'Required fields missing' })
   async create(@Body() dto: CreateTrackDto) {
     return this.tracksService.create(dto);
   }
 
   @Get()
   @ApiOperation({ summary: `Get all ${docs.entity}s` })
-  @ApiResponse({ status: 200, description: `All ${docs.entity}s`, type: [docs.type] })
+  @ApiOkResponse({ description: `All ${docs.entity}s`, type: [docs.type] })
   async findAll() {
     return this.tracksService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({ summary: `Get ${docs.entity} by ID` })
-  @ApiResponse({ status: 200, description: 'The found record', type: docs.type })
+  @ApiOkResponse({ description: 'The found record', type: docs.type })
   @ApiResponse({ status: 400, description: 'Invalid id (not uuid)' })
   @ApiResponse({ status: 404, description: `${docs.entity} not exist` })
   async findOne(@Param('id', ParseUUIDPipe) uuid: string) {
@@ -42,10 +56,13 @@ export class TrackController {
 
   @Put(':id')
   @ApiOperation({ summary: `Update ${docs.entity} by ID` })
-  @ApiResponse({ status: 200, description: `${docs.entity} updated`, type: docs.type })
+  @ApiOkResponse({ description: `${docs.entity} updated`, type: docs.type })
   @ApiResponse({ status: 400, description: 'Invalid id (not uuid)' })
   @ApiResponse({ status: 404, description: `${docs.entity} not exist` })
-  async update(@Body() dto: UpdateTrackDto, @Param('id', ParseUUIDPipe) uuid: string) {
+  async update(
+    @Body() dto: UpdateTrackDto,
+    @Param('id', ParseUUIDPipe) uuid: string,
+  ) {
     return this.tracksService.update(uuid, dto);
   }
 
