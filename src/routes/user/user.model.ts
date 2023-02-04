@@ -16,7 +16,6 @@ export class User implements IUser {
   @ApiProperty({ example: 'user@gmail.com', description: 'User login' })
   login: string;
 
-  @ApiProperty({ example: '12345678', description: 'Password' })
   @Exclude()
   password: string;
 

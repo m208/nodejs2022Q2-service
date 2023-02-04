@@ -2,7 +2,16 @@ import { Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { FavoritesService } from './favs.service';
 import { Delete, HttpCode } from '@nestjs/common/decorators';
 
-import { ApiResponse, ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiResponse,
+  ApiTags,
+  ApiOperation,
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiUnprocessableEntityResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+} from '@nestjs/swagger';
 import { FavoritesResponse } from './dto/response-favs.dto';
 
 const docs = {
@@ -15,30 +24,36 @@ const docs = {
 export class FavoritesController {
   constructor(private favsService: FavoritesService) {}
 
-  @ApiOperation({ summary: `Get all ${docs.entity}` })
-  @ApiResponse({ status: 200, type: [docs.type] })
   @Get()
+  @ApiOperation({ summary: `Get all ${docs.entity}` })
+  @ApiResponse({ status: 200, description: `All ${docs.entity}`, type: [docs.type] })
   async findAll() {
     return this.favsService.getAllFavs();
   }
 
   @Post('track/:id')
   @ApiOperation({ summary: `Add track to the favorites` })
-  @ApiResponse({ status: 201, type: String })
+  @ApiCreatedResponse({ description: 'Added to favorites' })
+  @ApiBadRequestResponse({ description: 'Invalid id (not uuid)' })
+  @ApiUnprocessableEntityResponse({ description: 'Item not existed' })
   async addTrack(@Param('id', ParseUUIDPipe) uuid: string) {
     return this.favsService.addTrack(uuid);
   }
 
   @Post('album/:id')
   @ApiOperation({ summary: `Add album to the favorites` })
-  @ApiResponse({ status: 201, type: String })
+  @ApiCreatedResponse({ description: 'Added to favorites' })
+  @ApiBadRequestResponse({ description: 'Invalid id (not uuid)' })
+  @ApiUnprocessableEntityResponse({ description: 'Item not existed' })
   async addAlbum(@Param('id', ParseUUIDPipe) uuid: string) {
     return this.favsService.addAlbum(uuid);
   }
 
   @Post('artist/:id')
   @ApiOperation({ summary: `Add artist to the favorites` })
-  @ApiResponse({ status: 201, type: String })
+  @ApiCreatedResponse({ description: 'Added to favorites' })
+  @ApiBadRequestResponse({ description: 'Invalid id (not uuid)' })
+  @ApiUnprocessableEntityResponse({ description: 'Item not existed' })
   async addArtist(@Param('id', ParseUUIDPipe) uuid: string) {
     return this.favsService.addArtist(uuid);
   }
@@ -46,7 +61,9 @@ export class FavoritesController {
   @Delete('track/:id')
   @HttpCode(204)
   @ApiOperation({ summary: `Delete track from favorites` })
-  @ApiResponse({ status: 204 })
+  @ApiNoContentResponse({ description: 'Deleted from favorites' })
+  @ApiBadRequestResponse({ description: 'Invalid id (not uuid)' })
+  @ApiNotFoundResponse({ description: 'Item not in favorites' })
   async delTrack(@Param('id', ParseUUIDPipe) uuid: string) {
     return this.favsService.delTrack(uuid);
   }
@@ -54,7 +71,9 @@ export class FavoritesController {
   @Delete('album/:id')
   @HttpCode(204)
   @ApiOperation({ summary: `Delete album from favorites` })
-  @ApiResponse({ status: 204 })
+  @ApiNoContentResponse({ description: 'Deleted from favorites' })
+  @ApiBadRequestResponse({ description: 'Invalid id (not uuid)' })
+  @ApiNotFoundResponse({ description: 'Item not in favorites' })
   async delAlbum(@Param('id', ParseUUIDPipe) uuid: string) {
     return this.favsService.delAlbum(uuid);
   }
@@ -62,7 +81,9 @@ export class FavoritesController {
   @Delete('artist/:id')
   @HttpCode(204)
   @ApiOperation({ summary: `Delete artist from favorites` })
-  @ApiResponse({ status: 204 })
+  @ApiNoContentResponse({ description: 'Deleted from favorites' })
+  @ApiBadRequestResponse({ description: 'Invalid id (not uuid)' })
+  @ApiNotFoundResponse({ description: 'Item not in favorites' })
   async delArtist(@Param('id', ParseUUIDPipe) uuid: string) {
     return this.favsService.delArtist(uuid);
   }

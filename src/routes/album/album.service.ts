@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { DBInMemory } from 'src/db/db.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
