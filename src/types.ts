@@ -28,7 +28,7 @@ export interface IAlbum {
   artistId: string | null; // refers to Artist
 }
 
-export interface Favorites {
+export interface IFavorites {
   artists: string[]; // favorite artists ids
   albums: string[]; // favorite albums ids
   tracks: string[]; // favorite tracks ids

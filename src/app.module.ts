@@ -11,6 +11,8 @@ import { ArtistController } from './routes/artist/artist.controller';
 import { ArtistService } from './routes/artist/artist.service';
 import { AlbumController } from './routes/album/album.controller';
 import { AlbumService } from './routes/album/album.service';
+import { FavoritesService } from './routes/favs/favs.service';
+import { FavoritesController } from './routes/favs/favs.controller';
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { AlbumService } from './routes/album/album.service';
     TrackController,
     ArtistController,
     AlbumController,
+    FavoritesController,
   ],
   providers: [
     AppService,
@@ -32,6 +35,7 @@ import { AlbumService } from './routes/album/album.service';
     TrackService,
     ArtistService,
     AlbumService,
+    FavoritesService,
   ],
 })
 export class AppModule {}
