@@ -28,7 +28,6 @@ export abstract class DBEntity<
   async findMany<K extends keyof Entity>(
     option: OptionsEqualsAnyOf<Entity, K>,
   ): Promise<Entity[]>;
-  async findMany<K extends keyof Entity>(): Promise<Entity[]>;
 
   async findMany<K extends keyof Entity>(
     options?: Options<Entity, K>,
