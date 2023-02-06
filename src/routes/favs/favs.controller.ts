@@ -1,6 +1,7 @@
-import { Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { FavoritesService } from './favs.service';
 import { Delete, HttpCode } from '@nestjs/common/decorators';
+import { validate } from 'uuid';
 
 import {
   ApiResponse,
@@ -11,13 +12,18 @@ import {
   ApiUnprocessableEntityResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
+  ApiParam,
 } from '@nestjs/swagger';
 import { FavoritesResponse } from './dto/response-favs.dto';
+import { BadRequestException } from '@nestjs/common/exceptions';
 
 const docs = {
   entity: 'Favorites',
   type: FavoritesResponse,
 };
+
+const favItems = ['track', 'album', 'artist'];
+export type FavItems = 'track' | 'album' | 'artist';
 
 @ApiTags(`${docs.entity}`)
 @Controller('favs')
@@ -35,60 +41,38 @@ export class FavoritesController {
     return this.favsService.getAllFavs();
   }
 
-  @Post('track/:id')
-  @ApiOperation({ summary: `Add track to the favorites` })
+  @Post('/:type/:id')
+  @ApiParam({ name: 'type', type: `'track' | 'album' | 'artist'` })
+  @ApiParam({ name: 'id', type: 'string' })
+  @ApiOperation({ summary: `Add item (track/album/artist) to the favorites` })
   @ApiCreatedResponse({ description: 'Added to favorites' })
   @ApiBadRequestResponse({ description: 'Invalid id (not uuid)' })
   @ApiUnprocessableEntityResponse({ description: 'Item not existed' })
-  async addTrack(@Param('id', ParseUUIDPipe) uuid: string) {
-    return this.favsService.addTrack(uuid);
+  async handleAddFav(@Param() params: { type: FavItems; id: string }) {
+    if (!validate(params.id)) {
+      throw new BadRequestException('Invalid id (not uuid)');
+    }
+
+    if (favItems.includes(params.type)) {
+      return this.favsService.addFav(params.type, params.id);
+    }
   }
 
-  @Post('album/:id')
-  @ApiOperation({ summary: `Add album to the favorites` })
-  @ApiCreatedResponse({ description: 'Added to favorites' })
-  @ApiBadRequestResponse({ description: 'Invalid id (not uuid)' })
-  @ApiUnprocessableEntityResponse({ description: 'Item not existed' })
-  async addAlbum(@Param('id', ParseUUIDPipe) uuid: string) {
-    return this.favsService.addAlbum(uuid);
-  }
-
-  @Post('artist/:id')
-  @ApiOperation({ summary: `Add artist to the favorites` })
-  @ApiCreatedResponse({ description: 'Added to favorites' })
-  @ApiBadRequestResponse({ description: 'Invalid id (not uuid)' })
-  @ApiUnprocessableEntityResponse({ description: 'Item not existed' })
-  async addArtist(@Param('id', ParseUUIDPipe) uuid: string) {
-    return this.favsService.addArtist(uuid);
-  }
-
-  @Delete('track/:id')
+  @Delete('/:type/:id')
   @HttpCode(204)
-  @ApiOperation({ summary: `Delete track from favorites` })
+  @ApiParam({ name: 'type', type: `'track' | 'album' | 'artist'` })
+  @ApiParam({ name: 'id', type: 'string' })
+  @ApiOperation({ summary: `Delete item (track/album/artist) from favorites` })
   @ApiNoContentResponse({ description: 'Deleted from favorites' })
   @ApiBadRequestResponse({ description: 'Invalid id (not uuid)' })
   @ApiNotFoundResponse({ description: 'Item not in favorites' })
-  async delTrack(@Param('id', ParseUUIDPipe) uuid: string) {
-    return this.favsService.delTrack(uuid);
-  }
+  async delFav(@Param() params: { type: FavItems; id: string }) {
+    if (!validate(params.id)) {
+      throw new BadRequestException('Invalid id (not uuid)');
+    }
 
-  @Delete('album/:id')
-  @HttpCode(204)
-  @ApiOperation({ summary: `Delete album from favorites` })
-  @ApiNoContentResponse({ description: 'Deleted from favorites' })
-  @ApiBadRequestResponse({ description: 'Invalid id (not uuid)' })
-  @ApiNotFoundResponse({ description: 'Item not in favorites' })
-  async delAlbum(@Param('id', ParseUUIDPipe) uuid: string) {
-    return this.favsService.delAlbum(uuid);
-  }
-
-  @Delete('artist/:id')
-  @HttpCode(204)
-  @ApiOperation({ summary: `Delete artist from favorites` })
-  @ApiNoContentResponse({ description: 'Deleted from favorites' })
-  @ApiBadRequestResponse({ description: 'Invalid id (not uuid)' })
-  @ApiNotFoundResponse({ description: 'Item not in favorites' })
-  async delArtist(@Param('id', ParseUUIDPipe) uuid: string) {
-    return this.favsService.delArtist(uuid);
+    if (favItems.includes(params.type)) {
+      return this.favsService.delFav(params.type, params.id);
+    }
   }
 }
