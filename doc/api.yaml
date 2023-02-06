@@ -442,16 +442,21 @@ paths:
                   $ref: "#/components/schemas/FavoritesResponse"
       tags:
         - "Favorites"
-  /favs/track/{id}:
+  /favs/{type}/{id}:
     post:
-      operationId: "FavoritesController_addTrack"
-      summary: "Add track to the favorites"
+      operationId: "FavoritesController_handleAddFav"
+      summary: "Add item (track/album/artist) to the favorites"
       parameters:
         - name: "id"
           required: true
           in: "path"
           schema:
             type: "string"
+        - name: "type"
+          required: true
+          in: "path"
+          schema:
+            type: "'track' | 'album' | 'artist'"
       responses:
         201:
           description: "Added to favorites"
@@ -462,88 +467,19 @@ paths:
       tags:
         - "Favorites"
     delete:
-      operationId: "FavoritesController_delTrack"
-      summary: "Delete track from favorites"
+      operationId: "FavoritesController_delFav"
+      summary: "Delete item (track/album/artist) from favorites"
       parameters:
         - name: "id"
           required: true
           in: "path"
           schema:
             type: "string"
-      responses:
-        204:
-          description: "Deleted from favorites"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Item not in favorites"
-      tags:
-        - "Favorites"
-  /favs/album/{id}:
-    post:
-      operationId: "FavoritesController_addAlbum"
-      summary: "Add album to the favorites"
-      parameters:
-        - name: "id"
+        - name: "type"
           required: true
           in: "path"
           schema:
-            type: "string"
-      responses:
-        201:
-          description: "Added to favorites"
-        400:
-          description: "Invalid id (not uuid)"
-        422:
-          description: "Item not existed"
-      tags:
-        - "Favorites"
-    delete:
-      operationId: "FavoritesController_delAlbum"
-      summary: "Delete album from favorites"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      responses:
-        204:
-          description: "Deleted from favorites"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Item not in favorites"
-      tags:
-        - "Favorites"
-  /favs/artist/{id}:
-    post:
-      operationId: "FavoritesController_addArtist"
-      summary: "Add artist to the favorites"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      responses:
-        201:
-          description: "Added to favorites"
-        400:
-          description: "Invalid id (not uuid)"
-        422:
-          description: "Item not existed"
-      tags:
-        - "Favorites"
-    delete:
-      operationId: "FavoritesController_delArtist"
-      summary: "Delete artist from favorites"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
+            type: "'track' | 'album' | 'artist'"
       responses:
         204:
           description: "Deleted from favorites"
@@ -559,7 +495,8 @@ info:
   version: "1.0.0"
   contact: {}
 tags: []
-servers: []
+servers:
+  - url: "http://localhost:4000"
 components:
   schemas:
     CreateUserDto:
