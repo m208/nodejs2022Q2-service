@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { IUser } from 'src/types';
-import { DBEntity } from './DBentities';
+import { DBEntity } from './DBEntities';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdatePasswordDto } from 'src/routes/user/dto/update-user.dto';
 import { CreateUserDto } from 'src/routes/user/dto/create-user.dto';

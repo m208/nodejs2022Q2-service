@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { DBEntity } from './DBentities';
+import { DBEntity } from './DBEntities';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateAlbumDto } from 'src/routes/album/dto/create-album.dto';
 import { UpdateAlbumDto } from 'src/routes/album/dto/update-album.dto';

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { DBEntity } from './DBentities';
+import { DBEntity } from './DBEntities';
 import { v4 as uuidv4 } from 'uuid';
 import { Artist } from 'src/routes/artist/entities/artist.entity';
 import { UpdateArtistDto } from 'src/routes/artist/dto/update-artist.dto';

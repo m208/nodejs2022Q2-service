@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { DBEntity } from './DBentities';
+import { DBEntity } from './DBEntities';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateTrackDto } from 'src/routes/track/dto/create-track.dto';
 import { UpdateTrackDto } from 'src/routes/track/dto/update-track.dto';
