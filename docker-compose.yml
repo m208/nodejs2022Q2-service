@@ -12,11 +12,13 @@ services:
       - .:/app
       - /app/node_modules
     ports:
-      - 4000:4000
+      - ${PORT}:${PORT}
     command: npm run start:dev
+    depends_on:
+      - postgres
     restart: always
 
-  postgress:
+  postgres:
     container_name: postgres
     build:
       context: ./
@@ -30,7 +32,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PG_DATA: /var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - ${POSTGRESS_PORT}:${POSTGRESS_PORT}
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: always

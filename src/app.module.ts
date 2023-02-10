@@ -13,11 +13,23 @@ import { AlbumController } from './routes/album/album.controller';
 import { AlbumService } from './routes/album/album.service';
 import { FavoritesService } from './routes/favs/favs.service';
 import { FavoritesController } from './routes/favs/favs.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
+    }),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.POSTGRESS_HOST,
+      port: +process.env.POSTGRESS_PORT,
+      username: process.env.POSTGRES_USER,
+      password: process.env.POSTGRESS_PASSWORD,
+      database: process.env.POSTGRES_DB,
+
+      entities: [],
+      synchronize: true,
     }),
   ],
   controllers: [
