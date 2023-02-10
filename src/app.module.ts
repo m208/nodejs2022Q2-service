@@ -21,7 +21,7 @@ import { ArtistModule } from './routes/artist/artist.module';
       database: process.env.POSTGRES_DB,
 
       entities: [Track],
-      synchronize: true,
+      //synchronize: true,
     }),
     TrackModule,
     AlbumModule,
