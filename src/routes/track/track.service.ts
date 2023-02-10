@@ -1,41 +1,46 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-
-import { DBInMemory } from 'src/db/db.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
+import { Track } from './entities/track.entity';
 
 @Injectable()
 export class TrackService {
-  constructor(private db: DBInMemory) {}
+  constructor(
+    @InjectRepository(Track)
+    private tracksRepository: Repository<Track>,
+  ) {}
 
   async create(dto: CreateTrackDto) {
-    return this.db.tracks.create(dto);
+    return await this.tracksRepository.save(dto);
   }
 
   async findAll() {
-    return this.db.tracks.findAll();
+    return await this.tracksRepository.find();
   }
 
-  async findOne(uuid: string) {
-    const entry = this.db.tracks.findOne(uuid);
+  async findOne(id: string): Promise<Track> {
+    const entry = await this.tracksRepository.findOneBy({ id });
+
+    console.log(entry);
+
     if (!entry) {
       throw new NotFoundException('Track not found');
     }
     return entry;
   }
 
-  async delete(uuid: string) {
-    const entry = await this.findOne(uuid);
-    const query = this.db.tracks.delete(entry.id);
+  async delete(id: string) {
+    const entry = await this.findOne(id);
 
-    this.db.favorites.track.removeItem(uuid);
+    //this.db.favorites.track.removeItem(uuid);
 
-    return query;
+    return await this.tracksRepository.delete(entry.id);
   }
 
   async update(id: string, dto: UpdateTrackDto) {
     const entry = await this.findOne(id);
-    const query = await this.db.tracks.update(entry.id, dto);
-    return query;
+    return await this.tracksRepository.update(entry.id, dto);
   }
 }

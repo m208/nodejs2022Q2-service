@@ -1,19 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
-import { UserController } from './routes/user/user.controller';
-import { TrackController } from './routes/track/track.controller';
-import { DBInMemory } from './db/db.service';
-import { UserService } from './routes/user/user.service';
-import { TrackService } from './routes/track/track.service';
-import { ArtistController } from './routes/artist/artist.controller';
-import { ArtistService } from './routes/artist/artist.service';
-import { AlbumController } from './routes/album/album.controller';
-import { AlbumService } from './routes/album/album.service';
-import { FavoritesService } from './routes/favs/favs.service';
-import { FavoritesController } from './routes/favs/favs.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Track } from './routes/track/entities/track.entity';
+import { TrackModule } from './routes/track/track.module';
+import { DataSource } from 'typeorm';
+import { AlbumModule } from './routes/album/album.module';
+import { ArtistModule } from './routes/artist/artist.module';
 
 @Module({
   imports: [
@@ -28,26 +20,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRES_DB,
 
-      entities: [],
+      entities: [Track],
       synchronize: true,
     }),
-  ],
-  controllers: [
-    AppController,
-    UserController,
-    TrackController,
-    ArtistController,
-    AlbumController,
-    FavoritesController,
-  ],
-  providers: [
-    AppService,
-    UserService,
-    DBInMemory,
-    TrackService,
-    ArtistService,
-    AlbumService,
-    FavoritesService,
+    TrackModule,
+    AlbumModule,
+    ArtistModule,
   ],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}
