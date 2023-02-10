@@ -8,6 +8,6 @@ RUN npm install
 
 COPY . .
 
-COPY ./dist ./dist
+EXPOSE ${PORT}
 
 CMD ["npm", "run", "start:dev"]

@@ -24,6 +24,10 @@ services:
     env_file:
       - .env
     environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PG_DATA: /var/lib/postgresql/data
     ports:
       - 5432:5432
@@ -33,3 +37,4 @@ services:
 
 volumes:
   pgdata:
+
