@@ -23,8 +23,6 @@ export class TrackService {
   async findOne(id: string): Promise<Track> {
     const entry = await this.tracksRepository.findOneBy({ id });
 
-    console.log(entry);
-
     if (!entry) {
       throw new NotFoundException('Track not found');
     }
@@ -41,6 +39,7 @@ export class TrackService {
 
   async update(id: string, dto: UpdateTrackDto) {
     const entry = await this.findOne(id);
-    return await this.tracksRepository.update(entry.id, dto);
+    await this.tracksRepository.update(entry.id, dto);
+    return await this.findOne(id);
   }
 }

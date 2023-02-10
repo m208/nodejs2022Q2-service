@@ -5,12 +5,16 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 export class Track implements ITrack {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
   @Column()
   name: string;
-  @Column()
+
+  @Column({ nullable: true })
   artistId: string | null;
-  @Column()
+
+  @Column({ nullable: true })
   albumId: string | null;
+
   @Column()
   duration: number;
 }
