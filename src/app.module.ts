@@ -7,6 +7,7 @@ import { AlbumModule } from './routes/album/album.module';
 import { ArtistModule } from './routes/artist/artist.module';
 import { Track } from './routes/track/entities/track.entity';
 import { Artist } from './routes/artist/entities/artist.entity';
+import { Album } from './routes/album/entities/album.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { Artist } from './routes/artist/entities/artist.entity';
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRES_DB,
 
-      entities: [Track, Artist],
+      entities: [Track, Artist, Album],
       synchronize: true,
     }),
     TrackModule,

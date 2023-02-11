@@ -47,4 +47,9 @@ export class ArtistService {
     await this.repository.update(entry.id, dto);
     return await this.findOne(id);
   }
+
+  async isArtistExisted(id: string) {
+    const entry = await this.repository.findOneBy({ id });
+    return !!entry;
+  }
 }

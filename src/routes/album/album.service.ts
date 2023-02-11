@@ -3,62 +3,62 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ArtistService } from '../artist/artist.service';
+import { TrackService } from '../track/track.service';
 
-import { DBInMemory } from 'src/db/db.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
+import { Album } from './entities/album.entity';
 
 @Injectable()
 export class AlbumService {
-  constructor(private db: DBInMemory) {}
+  constructor(
+    @InjectRepository(Album)
+    private repository: Repository<Album>,
+    private tracksService: TrackService,
+    private artistsService: ArtistService,
+  ) {}
 
   async create(dto: CreateAlbumDto) {
     if (dto.artistId !== null) {
-      const artist = this.db.artists.findOne(dto.artistId);
+      const artist = await this.artistsService.isArtistExisted(dto.artistId);
 
       if (!artist) {
         throw new BadRequestException('This Artist not existed');
       }
     }
 
-    return this.db.albums.create(dto);
+    return await this.repository.save(dto);
   }
 
   async findAll() {
-    return this.db.albums.findAll();
+    return await this.repository.find();
   }
 
-  async findOne(uuid: string) {
-    const entry = this.db.albums.findOne(uuid);
+  async findOne(id: string) {
+    const entry = await this.repository.findOneBy({ id });
+
     if (!entry) {
-      throw new NotFoundException('Track not found');
+      throw new NotFoundException('Album not found');
     }
     return entry;
   }
 
-  async delete(uuid: string) {
-    const entry = await this.findOne(uuid);
-    const query = this.db.albums.delete(entry.id);
-    const tracks = await this.db.tracks.findMany({
-      key: 'albumId',
-      equals: uuid,
-    });
+  async delete(id: string) {
+    const entry = await this.findOne(id);
 
-    for (const track of tracks) {
-      await this.db.tracks.update(track.id, {
-        ...track,
-        albumId: null,
-      });
-    }
+    await this.tracksService.clearAlbum(id);
 
-    this.db.favorites.album.removeItem(uuid);
+    // this.db.favorites.album.removeItem(uuid);
 
-    return query;
+    return await this.repository.delete(entry.id);
   }
 
   async update(id: string, dto: UpdateAlbumDto) {
     const entry = await this.findOne(id);
-    const query = await this.db.albums.update(entry.id, dto);
-    return query;
+    await this.repository.update(entry.id, dto);
+    return await this.findOne(id);
   }
 }
