@@ -12,6 +12,14 @@ export class TrackService {
     private tracksRepository: Repository<Track>,
   ) {}
 
+  async clearArtist(id: string) {
+    const tracks = await this.tracksRepository.findBy({ artistId: id });
+
+    for (const track of tracks) {
+      await this.update(track.id, { artistId: null });
+    }
+  }
+
   async create(dto: CreateTrackDto) {
     return await this.tracksRepository.save(dto);
   }

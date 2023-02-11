@@ -1,53 +1,50 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { TrackService } from '../track/track.service';
 
-import { DBInMemory } from 'src/db/db.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
+import { Artist } from './entities/artist.entity';
 
 @Injectable()
 export class ArtistService {
-  constructor(private db: DBInMemory) {}
+  constructor(
+    @InjectRepository(Artist)
+    private repository: Repository<Artist>,
+    private tracksService: TrackService,
+  ) {}
 
   async create(dto: CreateArtistDto) {
-    return this.db.artists.create(dto);
+    return await this.repository.save(dto);
   }
 
   async findAll() {
-    return this.db.artists.findAll();
+    return await this.repository.find();
   }
 
-  async findOne(uuid: string) {
-    const entry = this.db.artists.findOne(uuid);
+  async findOne(id: string) {
+    const entry = await this.repository.findOneBy({ id });
+
     if (!entry) {
-      throw new NotFoundException('Track not found');
+      throw new NotFoundException('Artist not found');
     }
     return entry;
   }
 
-  async delete(uuid: string) {
-    const entry = await this.findOne(uuid);
+  async delete(id: string) {
+    const entry = await this.findOne(id);
 
-    const query = this.db.artists.delete(entry.id);
-    const tracks = await this.db.tracks.findMany({
-      key: 'artistId',
-      equals: uuid,
-    });
+    await this.tracksService.clearArtist(id);
 
-    for (const track of tracks) {
-      await this.db.tracks.update(track.id, {
-        ...track,
-        artistId: null,
-      });
-    }
+    // this.db.favorites.artist.removeItem(uuid);
 
-    this.db.favorites.artist.removeItem(uuid);
-
-    return query;
+    return await this.repository.delete(entry.id);
   }
 
   async update(id: string, dto: UpdateArtistDto) {
     const entry = await this.findOne(id);
-    const query = await this.db.artists.update(entry.id, dto);
-    return query;
+    await this.repository.update(entry.id, dto);
+    return await this.findOne(id);
   }
 }

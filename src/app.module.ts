@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Track } from './routes/track/entities/track.entity';
 import { TrackModule } from './routes/track/track.module';
 import { DataSource } from 'typeorm';
 import { AlbumModule } from './routes/album/album.module';
 import { ArtistModule } from './routes/artist/artist.module';
+import { Track } from './routes/track/entities/track.entity';
+import { Artist } from './routes/artist/entities/artist.entity';
 
 @Module({
   imports: [
@@ -20,8 +21,8 @@ import { ArtistModule } from './routes/artist/artist.module';
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRES_DB,
 
-      entities: [Track],
-      //synchronize: true,
+      entities: [Track, Artist],
+      synchronize: true,
     }),
     TrackModule,
     AlbumModule,
