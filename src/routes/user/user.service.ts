@@ -1,44 +1,51 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ForbiddenException } from '@nestjs/common/exceptions';
-import { DBInMemory } from 'src/db/db.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
-import { User } from './user.model';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(private db: DBInMemory) {}
+  constructor(
+    @InjectRepository(User)
+    private repository: Repository<User>,
+  ) {}
 
-  async createUser(userDto: CreateUserDto) {
-    const users = await this.db.users.create(userDto);
-    return new User({ ...users });
-  }
-
-  async findAll() {
-    const users = this.db.users.findAll();
-    return users.map((el) => new User({ ...el }));
-  }
-
-  async findOne(uuid: string) {
-    const user = this.db.users.findOne(uuid);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+  async createUser(dto: CreateUserDto) {
+    // used to excluse password
+    const user = await this.repository.save(dto);
     return new User({ ...user });
   }
 
-  async delete(uuid: string) {
-    const user = await this.findOne(uuid);
-    const query = this.db.users.delete(user.id);
-    return query;
+  async findAll() {
+    return await this.repository.find();
   }
 
-  async update(id: string, userDto: UpdatePasswordDto) {
+  async findOne(id: string) {
+    const entry = await this.repository.findOneBy({ id });
+
+    if (!entry) {
+      throw new NotFoundException('User not found');
+    }
+    return entry;
+  }
+
+  async delete(id: string) {
     const user = await this.findOne(id);
-    if (user.password !== userDto.oldPassword) {
+    return await this.repository.delete(user.id);
+  }
+
+  async update(id: string, dto: UpdatePasswordDto) {
+    const user = await this.findOne(id);
+    if (user.password !== dto.oldPassword) {
       throw new ForbiddenException('Old password is wrong');
     }
-    const query = await this.db.users.update(user.id, userDto);
-    return new User({ ...query });
+
+    console.log('created: ', user.createdAt, user.login);
+
+    await this.repository.update(user.id, { password: dto.newPassword });
+    return await this.findOne(id);
   }
 }
