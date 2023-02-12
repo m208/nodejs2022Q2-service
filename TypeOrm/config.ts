@@ -2,7 +2,15 @@ import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import { Track } from '../src/routes/track/entities/track.entity';
-import { CreateTracksTable1676058199508 } from './migrations/1676058199508-CreateTracksTable';
+import { Artist } from '../src/routes/artist/entities/artist.entity';
+import { Album } from '../src/routes/album/entities/album.entity';
+import {
+  FavoriteAlbums,
+  FavoriteArtists,
+  FavoriteTracks,
+} from '../src/routes/favs/entities/favs.entity';
+import { User } from '../src/routes/user/entities/user.entity';
+import { InitialCreating1676222322081 } from './migrations/1676222322081-CreateDatabase';
 
 config();
 
@@ -21,21 +29,16 @@ export default new DataSource({
   username: configService.get('POSTGRES_USER'),
   password: configService.get('POSTGRES_PASSWORD'),
   database: configService.get('POSTGRES_DB'),
-  entities: [Track],
+  entities: [
+    Track,
+    Artist,
+    Album,
+    User,
+    FavoriteAlbums,
+    FavoriteArtists,
+    FavoriteTracks,
+  ],
 
-  migrations: [CreateTracksTable1676058199508],
+  synchronize: false,
+  migrations: [InitialCreating1676222322081],
 });
-
-// ds.initialize();
-
-// const connect = async () => {
-//   try {
-//     await ds.initialize();
-//     console.log('Data Source has been initialized!');
-//     return ds;
-//   } catch (err) {
-//     console.error('Error during Data Source initialization', err);
-//   }
-// };
-
-// export const dataSource = connect();

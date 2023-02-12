@@ -44,7 +44,6 @@ services:
       - ${PORT}:${PORT}
     networks:
       - app-network
-    command: npm run start:docked
     depends_on:
       - postgres
 

@@ -39,7 +39,7 @@ import { FavoritesModule } from './routes/favs/favs.module';
         FavoriteArtists,
         FavoriteTracks,
       ],
-      synchronize: true,
+      synchronize: false,
     }),
     UserModule,
     ArtistModule,
