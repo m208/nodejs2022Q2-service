@@ -41,10 +41,10 @@ import { FavoritesModule } from './routes/favs/favs.module';
       ],
       synchronize: true,
     }),
-    TrackModule,
-    AlbumModule,
-    ArtistModule,
     UserModule,
+    ArtistModule,
+    AlbumModule,
+    TrackModule,
     FavoritesModule,
   ],
 })
