@@ -37,10 +37,10 @@ export class AlbumService {
     return await this.repository.find();
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, throwErrors = true) {
     const entry = await this.repository.findOneBy({ id });
 
-    if (!entry) {
+    if (!entry && throwErrors) {
       throw new NotFoundException('Album not found');
     }
     return entry;
@@ -48,10 +48,7 @@ export class AlbumService {
 
   async delete(id: string) {
     const entry = await this.findOne(id);
-
     await this.tracksService.clearAlbum(id);
-
-    // this.db.favorites.album.removeItem(uuid);
 
     return await this.repository.delete(entry.id);
   }

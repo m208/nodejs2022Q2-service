@@ -36,10 +36,10 @@ export class TrackService {
     return await this.tracksRepository.find();
   }
 
-  async findOne(id: string): Promise<Track> {
+  async findOne(id: string, throwErrors = true) {
     const entry = await this.tracksRepository.findOneBy({ id });
 
-    if (!entry) {
+    if (!entry && throwErrors) {
       throw new NotFoundException('Track not found');
     }
     return entry;
@@ -47,8 +47,6 @@ export class TrackService {
 
   async delete(id: string) {
     const entry = await this.findOne(id);
-
-    //this.db.favorites.track.removeItem(uuid);
 
     return await this.tracksRepository.delete(entry.id);
   }

@@ -2,7 +2,6 @@ import { Controller, Get, Param, Post } from '@nestjs/common';
 import { FavoritesService } from './favs.service';
 import { Delete, HttpCode } from '@nestjs/common/decorators';
 import { validate } from 'uuid';
-
 import {
   ApiResponse,
   ApiTags,
@@ -15,7 +14,10 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 import { FavoritesResponse } from './dto/response-favs.dto';
-import { BadRequestException } from '@nestjs/common/exceptions';
+import {
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common/exceptions';
 
 const docs = {
   entity: 'Favorites',
@@ -42,7 +44,7 @@ export class FavoritesController {
   }
 
   @Post('/:type/:id')
-  @ApiParam({ name: 'type', type: `'track' | 'album' | 'artist'` })
+  @ApiParam({ name: 'type', type: `string` })
   @ApiParam({ name: 'id', type: 'string' })
   @ApiOperation({ summary: `Add item (track/album/artist) to the favorites` })
   @ApiCreatedResponse({ description: 'Added to favorites' })
@@ -56,11 +58,12 @@ export class FavoritesController {
     if (favItems.includes(params.type)) {
       return this.favsService.addFav(params.type, params.id);
     }
+    throw new NotFoundException('Path does not exist');
   }
 
   @Delete('/:type/:id')
   @HttpCode(204)
-  @ApiParam({ name: 'type', type: `'track' | 'album' | 'artist'` })
+  @ApiParam({ name: 'type', type: `string` })
   @ApiParam({ name: 'id', type: 'string' })
   @ApiOperation({ summary: `Delete item (track/album/artist) from favorites` })
   @ApiNoContentResponse({ description: 'Deleted from favorites' })
@@ -74,5 +77,6 @@ export class FavoritesController {
     if (favItems.includes(params.type)) {
       return this.favsService.delFav(params.type, params.id);
     }
+    throw new NotFoundException('Path does not exist');
   }
 }

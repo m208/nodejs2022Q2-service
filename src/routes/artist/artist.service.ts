@@ -23,10 +23,10 @@ export class ArtistService {
     return await this.repository.find();
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, throwErrors = true) {
     const entry = await this.repository.findOneBy({ id });
 
-    if (!entry) {
+    if (!entry && throwErrors) {
       throw new NotFoundException('Artist not found');
     }
     return entry;
@@ -34,10 +34,7 @@ export class ArtistService {
 
   async delete(id: string) {
     const entry = await this.findOne(id);
-
     await this.tracksService.clearArtist(id);
-
-    // this.db.favorites.artist.removeItem(uuid);
 
     return await this.repository.delete(entry.id);
   }

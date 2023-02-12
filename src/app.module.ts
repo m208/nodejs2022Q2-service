@@ -10,6 +10,12 @@ import { Artist } from './routes/artist/entities/artist.entity';
 import { Album } from './routes/album/entities/album.entity';
 import { UserModule } from './routes/user/user.module';
 import { User } from './routes/user/entities/user.entity';
+import {
+  FavoriteAlbums,
+  FavoriteArtists,
+  FavoriteTracks,
+} from './routes/favs/entities/favs.entity';
+import { FavoritesModule } from './routes/favs/favs.module';
 
 @Module({
   imports: [
@@ -24,13 +30,22 @@ import { User } from './routes/user/entities/user.entity';
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRES_DB,
 
-      entities: [Track, Artist, Album, User],
+      entities: [
+        Track,
+        Artist,
+        Album,
+        User,
+        FavoriteAlbums,
+        FavoriteArtists,
+        FavoriteTracks,
+      ],
       synchronize: true,
     }),
     TrackModule,
     AlbumModule,
     ArtistModule,
     UserModule,
+    FavoritesModule,
   ],
 })
 export class AppModule {

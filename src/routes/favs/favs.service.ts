@@ -3,67 +3,99 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-
-import { DBInMemory } from 'src/db/db.service';
-import { FavoritesResponse } from './dto/response-favs.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { AlbumService } from '../album/album.service';
+import { Album } from '../album/entities/album.entity';
+import { ArtistService } from '../artist/artist.service';
+import { Artist } from '../artist/entities/artist.entity';
+import { Track } from '../track/entities/track.entity';
+import { TrackService } from '../track/track.service';
+import {
+  FavoriteAlbums,
+  FavoriteArtists,
+  FavoriteTracks,
+} from './entities/favs.entity';
 import { FavItems } from './favs.controller';
 
 @Injectable()
 export class FavoritesService {
-  constructor(private db: DBInMemory) {}
+  constructor(
+    @InjectRepository(FavoriteTracks)
+    private repositoryFavTracks: Repository<FavoriteTracks>,
 
-  itemDBLink = {
-    track: this.db.tracks,
-    album: this.db.albums,
-    artist: this.db.artists,
+    @InjectRepository(FavoriteArtists)
+    private repositoryFavArtists: Repository<FavoriteArtists>,
+
+    @InjectRepository(FavoriteAlbums)
+    private repositoryFavAlbums: Repository<FavoriteAlbums>,
+
+    private tracksService: TrackService,
+    private artistsService: ArtistService,
+    private albumsService: AlbumService,
+  ) {}
+
+  itemRepositoty = {
+    track: this.tracksService,
+    album: this.albumsService,
+    artist: this.artistsService,
   };
-  favoritesDBLink = {
-    track: this.db.favorites.track,
-    album: this.db.favorites.album,
-    artist: this.db.favorites.artist,
+  favRepository = {
+    track: this.repositoryFavTracks,
+    album: this.repositoryFavAlbums,
+    artist: this.repositoryFavArtists,
+  };
+  favType = {
+    track: FavoriteTracks,
+    album: FavoriteAlbums,
+    artist: FavoriteArtists,
   };
 
-  async getAllFavs(): Promise<FavoritesResponse> {
-    const artistsIds = this.db.favorites.artist.getAll();
-    const artists = await this.db.artists.findMany({
-      key: 'id',
-      equalsAnyOf: artistsIds,
-    });
-
-    const albumsIds = this.db.favorites.album.getAll();
-    const albums = await this.db.albums.findMany({
-      key: 'id',
-      equalsAnyOf: albumsIds,
-    });
-
-    const tracksIds = this.db.favorites.track.getAll();
-    const tracks = await this.db.tracks.findMany({
-      key: 'id',
-      equalsAnyOf: tracksIds,
-    });
+  async getAllFavs() {
+    const getEntries = async (type: FavItems) => {
+      return (
+        await this.favRepository[type].find({
+          relations: { related: true },
+        })
+      ).map((el: { related: Track | Album | Artist }) => el.related);
+    };
 
     return {
-      artists,
-      albums,
-      tracks,
+      tracks: await getEntries('track'),
+      artists: await getEntries('artist'),
+      albums: await getEntries('album'),
     };
   }
 
-  addFav(type: FavItems, id: string) {
-    const item = this.itemDBLink[type].findOne(id);
+  async addFav(type: FavItems, id: string) {
+    const item = await this.itemRepositoty[type].findOne(id, false);
+
     if (item) {
-      return this.favoritesDBLink[type].addItem(id);
+      const favItem = new this.favType[type]();
+      favItem.id = id;
+      favItem.related = item;
+
+      // TS do not allow use object instead switch here
+      switch (type) {
+        case 'album':
+          return await this.repositoryFavAlbums.save(favItem);
+        case 'artist':
+          return await this.repositoryFavArtists.save(favItem);
+        case 'track':
+          return await this.repositoryFavTracks.save(favItem);
+      }
     }
 
-    throw new UnprocessableEntityException('Item not exist');
+    throw new UnprocessableEntityException(
+      `${type} with such id does not exist`,
+    );
   }
 
   delFav(type: FavItems, id: string) {
-    const item = this.itemDBLink[type].findOne(id);
+    const item = this.favRepository[type].findOne({ where: { id } });
     if (item) {
-      return this.favoritesDBLink[type].removeItem(id);
+      return this.favRepository[type].delete(id);
     }
-
     throw new NotFoundException('Item not found in favorites');
   }
 }
