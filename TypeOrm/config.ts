@@ -15,10 +15,10 @@ config();
 
 export default new DataSource({
   type: 'postgres',
-  host: process.env.POSTGRESS_HOST,
-  port: +process.env.POSTGRESS_PORT,
+  host: process.env.POSTGRES_HOST,
+  port: +process.env.POSTGRES_PORT,
   username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRESS_PASSWORD,
+  password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
 
   entities: [

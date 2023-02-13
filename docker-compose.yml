@@ -19,7 +19,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PG_DATA: /var/lib/postgresql/data
     ports:
-      - ${POSTGRESS_PORT}:${POSTGRESS_PORT}
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     networks:
       - app-network
     volumes:
