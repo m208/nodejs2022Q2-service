@@ -20,10 +20,11 @@ npm install --force
 
 ## Running application
 
-Run Docker Desktop, then run commands:
+Rename .env.example to .env
+
+Run Docker Desktop app, then run commands:
 ```
-docker-compose build
-docker-compose up
+docker-compose up --build
 ```
 
 App will be started in docker container. 
