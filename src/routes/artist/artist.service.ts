@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { TrackService } from '../track/track.service';
 
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
@@ -12,7 +11,6 @@ export class ArtistService {
   constructor(
     @InjectRepository(Artist)
     private repository: Repository<Artist>,
-    private tracksService: TrackService,
   ) {}
 
   async create(dto: CreateArtistDto) {
@@ -34,8 +32,6 @@ export class ArtistService {
 
   async delete(id: string) {
     const entry = await this.findOne(id);
-    await this.tracksService.clearArtist(id);
-
     return await this.repository.delete(entry.id);
   }
 

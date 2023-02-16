@@ -214,112 +214,6 @@ paths:
           description: "Artist not exist"
       tags:
         - "Artists"
-  /track:
-    post:
-      operationId: "TrackController_create"
-      summary: "Create Track"
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateTrackDto"
-      responses:
-        201:
-          description: "Track create"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Track"
-        400:
-          description: "Required fields missing"
-      tags:
-        - "Tracks"
-    get:
-      operationId: "TrackController_findAll"
-      summary: "Get all Tracks"
-      parameters: []
-      responses:
-        200:
-          description: "All Tracks"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/Track"
-      tags:
-        - "Tracks"
-  /track/{id}:
-    get:
-      operationId: "TrackController_findOne"
-      summary: "Get Track by ID"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      responses:
-        200:
-          description: "The found record"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Track"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Track not exist"
-      tags:
-        - "Tracks"
-    put:
-      operationId: "TrackController_update"
-      summary: "Update Track by ID"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateTrackDto"
-      responses:
-        200:
-          description: "Track updated"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Track"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Track not exist"
-      tags:
-        - "Tracks"
-    delete:
-      operationId: "TrackController_delete"
-      summary: "Delete Track by ID"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      responses:
-        204:
-          description: "Track deleted"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Track not exist"
-      tags:
-        - "Tracks"
   /album:
     post:
       operationId: "AlbumController_create"
@@ -426,6 +320,112 @@ paths:
           description: "Album not exist"
       tags:
         - "Albums"
+  /track:
+    post:
+      operationId: "TrackController_create"
+      summary: "Create Track"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTrackDto"
+      responses:
+        201:
+          description: "Track create"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Track"
+        400:
+          description: "Required fields missing"
+      tags:
+        - "Tracks"
+    get:
+      operationId: "TrackController_findAll"
+      summary: "Get all Tracks"
+      parameters: []
+      responses:
+        200:
+          description: "All Tracks"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Track"
+      tags:
+        - "Tracks"
+  /track/{id}:
+    get:
+      operationId: "TrackController_findOne"
+      summary: "Get Track by ID"
+      parameters:
+        - name: "id"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: "The found record"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Track"
+        400:
+          description: "Invalid id (not uuid)"
+        404:
+          description: "Track not exist"
+      tags:
+        - "Tracks"
+    put:
+      operationId: "TrackController_update"
+      summary: "Update Track by ID"
+      parameters:
+        - name: "id"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTrackDto"
+      responses:
+        200:
+          description: "Track updated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Track"
+        400:
+          description: "Invalid id (not uuid)"
+        404:
+          description: "Track not exist"
+      tags:
+        - "Tracks"
+    delete:
+      operationId: "TrackController_delete"
+      summary: "Delete Track by ID"
+      parameters:
+        - name: "id"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      responses:
+        204:
+          description: "Track deleted"
+        400:
+          description: "Invalid id (not uuid)"
+        404:
+          description: "Track not exist"
+      tags:
+        - "Tracks"
   /favs:
     get:
       operationId: "FavoritesController_findAll"
@@ -561,6 +561,33 @@ components:
       required:
         - "name"
         - "grammy"
+    Track:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+        artistId:
+          type: "string"
+          nullable: true
+        albumId:
+          type: "string"
+          nullable: true
+        duration:
+          type: "number"
+        artist:
+          $ref: "#/components/schemas/Artist"
+        album:
+          $ref: "#/components/schemas/Album"
+      required:
+        - "id"
+        - "name"
+        - "artistId"
+        - "albumId"
+        - "duration"
+        - "artist"
+        - "album"
     Artist:
       type: "object"
       properties:
@@ -570,10 +597,45 @@ components:
           type: "string"
         grammy:
           type: "boolean"
+        albums:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Album"
+        tracks:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Track"
       required:
         - "id"
         - "name"
         - "grammy"
+        - "albums"
+        - "tracks"
+    Album:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+        year:
+          type: "number"
+        artistId:
+          type: "string"
+          nullable: true
+        artist:
+          $ref: "#/components/schemas/Artist"
+        tracks:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Track"
+      required:
+        - "id"
+        - "name"
+        - "year"
+        - "artistId"
+        - "artist"
+        - "tracks"
     UpdateArtistDto:
       type: "object"
       properties:
@@ -584,6 +646,33 @@ components:
       required:
         - "name"
         - "grammy"
+    CreateAlbumDto:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        year:
+          type: "number"
+        artistId:
+          type: "string"
+      required:
+        - "name"
+        - "year"
+        - "artistId"
+    UpdateAlbumDto:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        year:
+          type: "number"
+        artistId:
+          type: "string"
+          nullable: true
+      required:
+        - "name"
+        - "year"
+        - "artistId"
     CreateTrackDto:
       type: "object"
       properties:
@@ -602,27 +691,6 @@ components:
         - "artistId"
         - "albumId"
         - "duration"
-    Track:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-        name:
-          type: "string"
-        artistId:
-          type: "string"
-          nullable: true
-        albumId:
-          type: "string"
-          nullable: true
-        duration:
-          type: "number"
-      required:
-        - "id"
-        - "name"
-        - "artistId"
-        - "albumId"
-        - "duration"
     UpdateTrackDto:
       type: "object"
       properties:
@@ -636,50 +704,6 @@ components:
           nullable: true
         duration:
           type: "number"
-    CreateAlbumDto:
-      type: "object"
-      properties:
-        name:
-          type: "string"
-        year:
-          type: "number"
-        artistId:
-          type: "string"
-      required:
-        - "name"
-        - "year"
-        - "artistId"
-    Album:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-        name:
-          type: "string"
-        year:
-          type: "number"
-        artistId:
-          type: "string"
-          nullable: true
-      required:
-        - "id"
-        - "name"
-        - "year"
-        - "artistId"
-    UpdateAlbumDto:
-      type: "object"
-      properties:
-        name:
-          type: "string"
-        year:
-          type: "number"
-        artistId:
-          type: "string"
-          nullable: true
-      required:
-        - "name"
-        - "year"
-        - "artistId"
     FavoritesResponse:
       type: "object"
       properties:

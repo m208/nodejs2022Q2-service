@@ -1,8 +1,9 @@
-import { IArtist } from 'src/types';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Album } from 'src/routes/album/entities/album.entity';
+import { Track } from 'src/routes/track/entities/track.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
-export class Artist implements IArtist {
+export class Artist {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -11,4 +12,10 @@ export class Artist implements IArtist {
 
   @Column()
   grammy: boolean;
+
+  @OneToMany(() => Album, (album) => album.artist)
+  albums: Album[];
+
+  @OneToMany(() => Track, (track) => track.artist)
+  tracks: Track[];
 }

@@ -6,8 +6,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ArtistService } from '../artist/artist.service';
-import { TrackService } from '../track/track.service';
-
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
@@ -17,7 +15,6 @@ export class AlbumService {
   constructor(
     @InjectRepository(Album)
     private repository: Repository<Album>,
-    private tracksService: TrackService,
     private artistsService: ArtistService,
   ) {}
 
@@ -48,8 +45,6 @@ export class AlbumService {
 
   async delete(id: string) {
     const entry = await this.findOne(id);
-    await this.tracksService.clearAlbum(id);
-
     return await this.repository.delete(entry.id);
   }
 
