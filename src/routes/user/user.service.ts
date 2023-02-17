@@ -43,8 +43,6 @@ export class UserService {
       throw new ForbiddenException('Old password is wrong');
     }
 
-    console.log('created: ', user.createdAt, user.login);
-
     await this.repository.update(user.id, { password: dto.newPassword });
     return await this.findOne(id);
   }
