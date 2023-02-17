@@ -9,7 +9,7 @@ import {
   FavoriteTracks,
 } from '../src/routes/favs/entities/favs.entity';
 import { User } from '../src/routes/user/entities/user.entity';
-import { InitialCreating1676222322081 } from './migrations/1676222322081-CreateDatabase';
+import { InitialCreating1676644263481 } from './migrations/1676644263481-CreateDatabase';
 
 config();
 
@@ -32,5 +32,5 @@ export default new DataSource({
   ],
 
   synchronize: false,
-  migrations: [InitialCreating1676222322081],
+  migrations: [InitialCreating1676644263481],
 });
