@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Post } from '@nestjs/common';
 import { FavoritesService } from './favs.service';
-import { Delete, HttpCode } from '@nestjs/common/decorators';
+import { Delete, HttpCode, UseGuards } from '@nestjs/common/decorators';
 import { validate } from 'uuid';
 import {
   ApiResponse,
@@ -12,12 +12,14 @@ import {
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiParam,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { FavoritesResponse } from './dto/response-favs.dto';
 import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common/exceptions';
+import { JwtAuthGuard } from '../auth/auth.guard';
 
 const docs = {
   entity: 'Favorites',
@@ -28,6 +30,8 @@ const favItems = ['track', 'album', 'artist'];
 export type FavItems = 'track' | 'album' | 'artist';
 
 @ApiTags(`${docs.entity}`)
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('favs')
 export class FavoritesController {
   constructor(private favsService: FavoritesService) {}

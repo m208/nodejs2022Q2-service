@@ -7,7 +7,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
-import { Delete, HttpCode, Put } from '@nestjs/common/decorators';
+import { Delete, HttpCode, Put, UseGuards } from '@nestjs/common/decorators';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { Track } from './entities/track.entity';
@@ -18,7 +18,9 @@ import {
   ApiCreatedResponse,
   ApiBadRequestResponse,
   ApiOkResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/auth.guard';
 
 const docs = {
   entity: 'Track',
@@ -26,6 +28,8 @@ const docs = {
 };
 
 @ApiTags(`${docs.entity}s`)
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('track')
 export class TrackController {
   constructor(private tracksService: TrackService) {}

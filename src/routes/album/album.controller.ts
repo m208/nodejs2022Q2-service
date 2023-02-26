@@ -7,7 +7,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
-import { Delete, HttpCode, Put } from '@nestjs/common/decorators';
+import { Delete, HttpCode, Put, UseGuards } from '@nestjs/common/decorators';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
@@ -17,7 +17,9 @@ import {
   ApiOperation,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/auth.guard';
 
 const docs = {
   entity: 'Album',
@@ -25,6 +27,8 @@ const docs = {
 };
 
 @ApiTags(`${docs.entity}s`)
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('album')
 export class AlbumController {
   constructor(private albumService: AlbumService) {}

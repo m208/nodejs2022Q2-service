@@ -14,15 +14,24 @@ import {
   Delete,
   HttpCode,
   Put,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common/decorators';
 
-import { ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiResponse,
+  ApiOperation,
+  ApiTags,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
+import { JwtAuthGuard } from '../auth/auth.guard';
 
 @ApiTags('Users')
+@ApiBearerAuth()
 @Controller('user')
+@UseGuards(JwtAuthGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(private usersService: UserService) {}

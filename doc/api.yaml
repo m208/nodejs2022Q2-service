@@ -22,6 +22,8 @@ paths:
           description: "Required fields missing"
       tags:
         - "Users"
+      security:
+        - bearer: []
     get:
       operationId: "UserController_findAll"
       summary: "Get all users"
@@ -37,6 +39,8 @@ paths:
                   $ref: "#/components/schemas/User"
       tags:
         - "Users"
+      security:
+        - bearer: []
   /user/{id}:
     get:
       operationId: "UserController_findOne"
@@ -60,6 +64,8 @@ paths:
           description: "User not exist"
       tags:
         - "Users"
+      security:
+        - bearer: []
     put:
       operationId: "UserController_update"
       summary: "Update user by ID"
@@ -90,6 +96,8 @@ paths:
           description: "User not exist"
       tags:
         - "Users"
+      security:
+        - bearer: []
     delete:
       operationId: "UserController_delete"
       summary: "Delete user by ID"
@@ -108,387 +116,8 @@ paths:
           description: "User not exist"
       tags:
         - "Users"
-  /artist:
-    post:
-      operationId: "ArtistController_create"
-      summary: "Create Artist"
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateArtistDto"
-      responses:
-        201:
-          description: "Artist create"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Artist"
-        400:
-          description: "Required fields missing"
-      tags:
-        - "Artists"
-    get:
-      operationId: "ArtistController_findAll"
-      summary: "Get all Artists"
-      parameters: []
-      responses:
-        200:
-          description: "All Artists"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/Artist"
-      tags:
-        - "Artists"
-  /artist/{id}:
-    get:
-      operationId: "ArtistController_findOne"
-      summary: "Get Artist by ID"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      responses:
-        200:
-          description: "The found record"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Artist"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Artist not exist"
-      tags:
-        - "Artists"
-    put:
-      operationId: "ArtistController_update"
-      summary: "Update Artist by ID"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateArtistDto"
-      responses:
-        200:
-          description: "Artist updated"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Artist"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Artist not exist"
-      tags:
-        - "Artists"
-    delete:
-      operationId: "ArtistController_delete"
-      summary: "Delete Artist by ID"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      responses:
-        204:
-          description: "Artist deleted"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Artist not exist"
-      tags:
-        - "Artists"
-  /album:
-    post:
-      operationId: "AlbumController_create"
-      summary: "Create Album"
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateAlbumDto"
-      responses:
-        201:
-          description: "Album create"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Album"
-        400:
-          description: "Required fields missing"
-      tags:
-        - "Albums"
-    get:
-      operationId: "AlbumController_findAll"
-      summary: "Get all Albums"
-      parameters: []
-      responses:
-        200:
-          description: "All Albums"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/Album"
-      tags:
-        - "Albums"
-  /album/{id}:
-    get:
-      operationId: "AlbumController_findOne"
-      summary: "Get Album by ID"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      responses:
-        200:
-          description: "The found record"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Album"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Album not exist"
-      tags:
-        - "Albums"
-    put:
-      operationId: "AlbumController_update"
-      summary: "Update Album by ID"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateAlbumDto"
-      responses:
-        200:
-          description: "Album updated"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Album"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Album not exist"
-      tags:
-        - "Albums"
-    delete:
-      operationId: "AlbumController_delete"
-      summary: "Delete Album by ID"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      responses:
-        204:
-          description: "Album deleted"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Album not exist"
-      tags:
-        - "Albums"
-  /track:
-    post:
-      operationId: "TrackController_create"
-      summary: "Create Track"
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateTrackDto"
-      responses:
-        201:
-          description: "Track create"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Track"
-        400:
-          description: "Required fields missing"
-      tags:
-        - "Tracks"
-    get:
-      operationId: "TrackController_findAll"
-      summary: "Get all Tracks"
-      parameters: []
-      responses:
-        200:
-          description: "All Tracks"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/Track"
-      tags:
-        - "Tracks"
-  /track/{id}:
-    get:
-      operationId: "TrackController_findOne"
-      summary: "Get Track by ID"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      responses:
-        200:
-          description: "The found record"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Track"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Track not exist"
-      tags:
-        - "Tracks"
-    put:
-      operationId: "TrackController_update"
-      summary: "Update Track by ID"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateTrackDto"
-      responses:
-        200:
-          description: "Track updated"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Track"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Track not exist"
-      tags:
-        - "Tracks"
-    delete:
-      operationId: "TrackController_delete"
-      summary: "Delete Track by ID"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      responses:
-        204:
-          description: "Track deleted"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Track not exist"
-      tags:
-        - "Tracks"
-  /favs:
-    get:
-      operationId: "FavoritesController_findAll"
-      summary: "Get all Favorites"
-      parameters: []
-      responses:
-        200:
-          description: "All Favorites"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/FavoritesResponse"
-      tags:
-        - "Favorites"
-  /favs/{type}/{id}:
-    post:
-      operationId: "FavoritesController_handleAddFav"
-      summary: "Add item (track/album/artist) to the favorites"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-        - name: "type"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      responses:
-        201:
-          description: "Added to favorites"
-        400:
-          description: "Invalid id (not uuid)"
-        422:
-          description: "Item not existed"
-      tags:
-        - "Favorites"
-    delete:
-      operationId: "FavoritesController_delFav"
-      summary: "Delete item (track/album/artist) from favorites"
-      parameters:
-        - name: "id"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-        - name: "type"
-          required: true
-          in: "path"
-          schema:
-            type: "string"
-      responses:
-        204:
-          description: "Deleted from favorites"
-        400:
-          description: "Invalid id (not uuid)"
-        404:
-          description: "Item not in favorites"
-      tags:
-        - "Favorites"
+      security:
+        - bearer: []
   /auth/signup:
     post:
       operationId: "AuthController_signup"
@@ -535,6 +164,423 @@ paths:
           description: "Authentication failed"
       tags:
         - "Authorization"
+  /artist:
+    post:
+      operationId: "ArtistController_create"
+      summary: "Create Artist"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateArtistDto"
+      responses:
+        201:
+          description: "Artist create"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Artist"
+        400:
+          description: "Required fields missing"
+      tags:
+        - "Artists"
+      security:
+        - bearer: []
+    get:
+      operationId: "ArtistController_findAll"
+      summary: "Get all Artists"
+      parameters: []
+      responses:
+        200:
+          description: "All Artists"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Artist"
+      tags:
+        - "Artists"
+      security:
+        - bearer: []
+  /artist/{id}:
+    get:
+      operationId: "ArtistController_findOne"
+      summary: "Get Artist by ID"
+      parameters:
+        - name: "id"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: "The found record"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Artist"
+        400:
+          description: "Invalid id (not uuid)"
+        404:
+          description: "Artist not exist"
+      tags:
+        - "Artists"
+      security:
+        - bearer: []
+    put:
+      operationId: "ArtistController_update"
+      summary: "Update Artist by ID"
+      parameters:
+        - name: "id"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateArtistDto"
+      responses:
+        200:
+          description: "Artist updated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Artist"
+        400:
+          description: "Invalid id (not uuid)"
+        404:
+          description: "Artist not exist"
+      tags:
+        - "Artists"
+      security:
+        - bearer: []
+    delete:
+      operationId: "ArtistController_delete"
+      summary: "Delete Artist by ID"
+      parameters:
+        - name: "id"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      responses:
+        204:
+          description: "Artist deleted"
+        400:
+          description: "Invalid id (not uuid)"
+        404:
+          description: "Artist not exist"
+      tags:
+        - "Artists"
+      security:
+        - bearer: []
+  /album:
+    post:
+      operationId: "AlbumController_create"
+      summary: "Create Album"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAlbumDto"
+      responses:
+        201:
+          description: "Album create"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Album"
+        400:
+          description: "Required fields missing"
+      tags:
+        - "Albums"
+      security:
+        - bearer: []
+    get:
+      operationId: "AlbumController_findAll"
+      summary: "Get all Albums"
+      parameters: []
+      responses:
+        200:
+          description: "All Albums"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Album"
+      tags:
+        - "Albums"
+      security:
+        - bearer: []
+  /album/{id}:
+    get:
+      operationId: "AlbumController_findOne"
+      summary: "Get Album by ID"
+      parameters:
+        - name: "id"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: "The found record"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Album"
+        400:
+          description: "Invalid id (not uuid)"
+        404:
+          description: "Album not exist"
+      tags:
+        - "Albums"
+      security:
+        - bearer: []
+    put:
+      operationId: "AlbumController_update"
+      summary: "Update Album by ID"
+      parameters:
+        - name: "id"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAlbumDto"
+      responses:
+        200:
+          description: "Album updated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Album"
+        400:
+          description: "Invalid id (not uuid)"
+        404:
+          description: "Album not exist"
+      tags:
+        - "Albums"
+      security:
+        - bearer: []
+    delete:
+      operationId: "AlbumController_delete"
+      summary: "Delete Album by ID"
+      parameters:
+        - name: "id"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      responses:
+        204:
+          description: "Album deleted"
+        400:
+          description: "Invalid id (not uuid)"
+        404:
+          description: "Album not exist"
+      tags:
+        - "Albums"
+      security:
+        - bearer: []
+  /track:
+    post:
+      operationId: "TrackController_create"
+      summary: "Create Track"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTrackDto"
+      responses:
+        201:
+          description: "Track create"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Track"
+        400:
+          description: "Required fields missing"
+      tags:
+        - "Tracks"
+      security:
+        - bearer: []
+    get:
+      operationId: "TrackController_findAll"
+      summary: "Get all Tracks"
+      parameters: []
+      responses:
+        200:
+          description: "All Tracks"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Track"
+      tags:
+        - "Tracks"
+      security:
+        - bearer: []
+  /track/{id}:
+    get:
+      operationId: "TrackController_findOne"
+      summary: "Get Track by ID"
+      parameters:
+        - name: "id"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: "The found record"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Track"
+        400:
+          description: "Invalid id (not uuid)"
+        404:
+          description: "Track not exist"
+      tags:
+        - "Tracks"
+      security:
+        - bearer: []
+    put:
+      operationId: "TrackController_update"
+      summary: "Update Track by ID"
+      parameters:
+        - name: "id"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTrackDto"
+      responses:
+        200:
+          description: "Track updated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Track"
+        400:
+          description: "Invalid id (not uuid)"
+        404:
+          description: "Track not exist"
+      tags:
+        - "Tracks"
+      security:
+        - bearer: []
+    delete:
+      operationId: "TrackController_delete"
+      summary: "Delete Track by ID"
+      parameters:
+        - name: "id"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      responses:
+        204:
+          description: "Track deleted"
+        400:
+          description: "Invalid id (not uuid)"
+        404:
+          description: "Track not exist"
+      tags:
+        - "Tracks"
+      security:
+        - bearer: []
+  /favs:
+    get:
+      operationId: "FavoritesController_findAll"
+      summary: "Get all Favorites"
+      parameters: []
+      responses:
+        200:
+          description: "All Favorites"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/FavoritesResponse"
+      tags:
+        - "Favorites"
+      security:
+        - bearer: []
+  /favs/{type}/{id}:
+    post:
+      operationId: "FavoritesController_handleAddFav"
+      summary: "Add item (track/album/artist) to the favorites"
+      parameters:
+        - name: "id"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+        - name: "type"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      responses:
+        201:
+          description: "Added to favorites"
+        400:
+          description: "Invalid id (not uuid)"
+        422:
+          description: "Item not existed"
+      tags:
+        - "Favorites"
+      security:
+        - bearer: []
+    delete:
+      operationId: "FavoritesController_delFav"
+      summary: "Delete item (track/album/artist) from favorites"
+      parameters:
+        - name: "id"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+        - name: "type"
+          required: true
+          in: "path"
+          schema:
+            type: "string"
+      responses:
+        204:
+          description: "Deleted from favorites"
+        400:
+          description: "Invalid id (not uuid)"
+        404:
+          description: "Item not in favorites"
+      tags:
+        - "Favorites"
+      security:
+        - bearer: []
 info:
   title: "Home Library Service"
   description: "Home music library service"
@@ -544,6 +590,11 @@ tags: []
 servers:
   - url: "http://localhost:4000"
 components:
+  securitySchemes:
+    bearer:
+      scheme: "bearer"
+      bearerFormat: "JWT"
+      type: "http"
   schemas:
     CreateUserDto:
       type: "object"
@@ -597,6 +648,23 @@ components:
       required:
         - "oldPassword"
         - "newPassword"
+    AuthUserDto:
+      type: "object"
+      properties:
+        login:
+          type: "string"
+        password:
+          type: "string"
+      required:
+        - "login"
+        - "password"
+    AuthResponse:
+      type: "object"
+      properties:
+        accessToken:
+          type: "string"
+      required:
+        - "accessToken"
     CreateArtistDto:
       type: "object"
       properties:
@@ -769,20 +837,3 @@ components:
         - "artists"
         - "albums"
         - "tracks"
-    AuthUserDto:
-      type: "object"
-      properties:
-        login:
-          type: "string"
-        password:
-          type: "string"
-      required:
-        - "login"
-        - "password"
-    AuthResponse:
-      type: "object"
-      properties:
-        accessToken:
-          type: "string"
-      required:
-        - "accessToken"

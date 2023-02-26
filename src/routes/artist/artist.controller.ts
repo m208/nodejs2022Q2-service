@@ -7,7 +7,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
-import { Delete, HttpCode, Put } from '@nestjs/common/decorators';
+import { Delete, HttpCode, Put, UseGuards } from '@nestjs/common/decorators';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { Artist } from './entities/artist.entity';
@@ -17,7 +17,9 @@ import {
   ApiOperation,
   ApiOkResponse,
   ApiCreatedResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/auth.guard';
 
 const docs = {
   entity: 'Artist',
@@ -25,6 +27,8 @@ const docs = {
 };
 
 @ApiTags(`${docs.entity}s`)
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('artist')
 export class ArtistController {
   constructor(private artistService: ArtistService) {}
