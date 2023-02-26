@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TrackModule } from './routes/track/track.module';
@@ -17,6 +17,7 @@ import {
 } from './routes/favs/entities/favs.entity';
 import { FavoritesModule } from './routes/favs/favs.module';
 import { AuthModule } from './routes/auth/auth.module';
+import LogsMiddleware from './logger/logs.middleware';
 
 @Module({
   imports: [
@@ -51,5 +52,8 @@ import { AuthModule } from './routes/auth/auth.module';
   ],
 })
 export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LogsMiddleware).forRoutes('*');
+  }
   constructor(private dataSource: DataSource) {}
 }
