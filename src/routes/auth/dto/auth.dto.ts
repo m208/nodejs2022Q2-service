@@ -10,6 +10,11 @@ export class AuthUserDto {
   readonly password: string;
 }
 
+export class RefreshTokenDto {
+  readonly refreshToken: string;
+}
+
 export class AuthResponse {
   readonly accessToken: string;
+  readonly refreshToken: string;
 }

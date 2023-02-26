@@ -164,6 +164,30 @@ paths:
           description: "Authentication failed"
       tags:
         - "Authorization"
+  /auth/refresh:
+    post:
+      operationId: "AuthController_refresh"
+      summary: "Get new acess token"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshTokenDto"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        401:
+          description: "No refresh token"
+        403:
+          description: "Token is invalid or expired"
+      tags:
+        - "Authorization"
   /artist:
     post:
       operationId: "ArtistController_create"
@@ -663,8 +687,18 @@ components:
       properties:
         accessToken:
           type: "string"
+        refreshToken:
+          type: "string"
       required:
         - "accessToken"
+        - "refreshToken"
+    RefreshTokenDto:
+      type: "object"
+      properties:
+        refreshToken:
+          type: "string"
+      required:
+        - "refreshToken"
     CreateArtistDto:
       type: "object"
       properties:

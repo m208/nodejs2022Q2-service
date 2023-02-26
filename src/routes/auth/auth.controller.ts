@@ -9,7 +9,7 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '../user/entities/user.entity';
 import { AuthService } from './auth.service';
-import { AuthResponse, AuthUserDto } from './dto/auth.dto';
+import { AuthResponse, AuthUserDto, RefreshTokenDto } from './dto/auth.dto';
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -33,5 +33,15 @@ export class AuthController {
   @ApiResponse({ status: 403, description: 'Authentication failed' })
   async login(@Body() userDto: AuthUserDto) {
     return this.authService.login(userDto);
+  }
+
+  @Post('/refresh')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Get new acess token' })
+  @ApiResponse({ status: 200, description: 'Success', type: AuthResponse })
+  @ApiResponse({ status: 401, description: 'No refresh token' })
+  @ApiResponse({ status: 403, description: 'Token is invalid or expired' })
+  async refresh(@Body() dto: RefreshTokenDto) {
+    return this.authService.refresh(dto);
   }
 }
