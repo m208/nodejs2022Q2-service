@@ -489,6 +489,52 @@ paths:
           description: "Item not in favorites"
       tags:
         - "Favorites"
+  /auth/signup:
+    post:
+      operationId: "AuthController_signup"
+      summary: "Create User"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthUserDto"
+      responses:
+        201:
+          description: "User created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        400:
+          description: "Required fields missing"
+      tags:
+        - "Authorization"
+  /auth/login:
+    post:
+      operationId: "AuthController_login"
+      summary: "Login"
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthUserDto"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        400:
+          description: "Required fields missing"
+        403:
+          description: "Authentication failed"
+      tags:
+        - "Authorization"
 info:
   title: "Home Library Service"
   description: "Home music library service"
@@ -723,3 +769,20 @@ components:
         - "artists"
         - "albums"
         - "tracks"
+    AuthUserDto:
+      type: "object"
+      properties:
+        login:
+          type: "string"
+        password:
+          type: "string"
+      required:
+        - "login"
+        - "password"
+    AuthResponse:
+      type: "object"
+      properties:
+        accessToken:
+          type: "string"
+      required:
+        - "accessToken"

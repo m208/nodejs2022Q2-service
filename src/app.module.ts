@@ -16,6 +16,7 @@ import {
   FavoriteTracks,
 } from './routes/favs/entities/favs.entity';
 import { FavoritesModule } from './routes/favs/favs.module';
+import { AuthModule } from './routes/auth/auth.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { FavoritesModule } from './routes/favs/favs.module';
     AlbumModule,
     TrackModule,
     FavoritesModule,
+    AuthModule,
   ],
 })
 export class AppModule {
