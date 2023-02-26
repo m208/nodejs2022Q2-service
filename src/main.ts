@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import * as fs from 'fs';
 import * as path from 'node:path';
 import * as YAML from 'json-to-pretty-yaml';
+import { CustomExceptionFilter } from './logger/exception.filter';
 
 const PORT = process.env.PORT || 4000;
 
@@ -30,6 +31,7 @@ async function bootstrap() {
   });
 
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new CustomExceptionFilter());
 
   await app.listen(PORT);
 }
