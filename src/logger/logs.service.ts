@@ -1,25 +1,31 @@
 import { Injectable, LoggerService } from '@nestjs/common';
 import { green, yellow, red, reset } from 'src/libs/colors/colors';
+import { FilesService } from './file.service';
 
 @Injectable()
 export class CustomLogger implements LoggerService {
-  log(message: string) {
+  private fileService = new FilesService();
+
+  async log(message: string) {
     console.log(`${green}LOG: ${message} ${reset}`);
+    await this.fileService.writeToFile('./logs', `LOG: ${message}`);
   }
 
-  error(message: string) {
+  async error(message: string) {
     console.log(`${red}ERR: ${message} ${reset}`);
+    await this.fileService.writeToFile('./logs', `ERR: ${message}`);
   }
 
-  warn(message: string) {
+  async warn(message: string) {
     console.log(`${yellow}WARN: ${message} ${reset}`);
+    await this.fileService.writeToFile('./logs', `WARN: ${message}`);
   }
 
-  debug?(message: string) {
+  async debug?(message: string) {
     console.log('DEBUG:', message);
   }
 
-  verbose?(message: string) {
+  async verbose?(message: string) {
     console.log('VERB:', message);
   }
 }
