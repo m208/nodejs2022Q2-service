@@ -18,6 +18,7 @@ import {
 import { FavoritesModule } from './routes/favs/favs.module';
 import { AuthModule } from './routes/auth/auth.module';
 import LogsMiddleware from './logger/logs.middleware';
+import { LogsModule } from './logger/logs.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import LogsMiddleware from './logger/logs.middleware';
     TrackModule,
     FavoritesModule,
     AuthModule,
+    LogsModule,
   ],
 })
 export class AppModule {

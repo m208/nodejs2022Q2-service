@@ -13,7 +13,7 @@ export class CustomLogger implements LoggerService {
 
   async error(message: string) {
     console.log(`${red}ERR: ${message} ${reset}`);
-    await this.fileService.writeToFile(`ERR: ${message}`);
+    await this.fileService.writeToErrorsFile(`ERR: ${message}`);
   }
 
   async warn(message: string) {

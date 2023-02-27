@@ -5,7 +5,7 @@ import * as path from 'path';
 
 export class FilesService {
   fileDate: string;
-  dir = './logs';
+  dir = './LOGS';
 
   constructor() {
     this.getCurrentDateString();
@@ -15,16 +15,20 @@ export class FilesService {
     this.fileDate = new Date().toISOString().replace(/:/g, '-');
   }
 
-  async writeToFile(message: string) {
+  async writeToErrorsFile(message: string) {
+    await this.writeToFile(message, path.resolve(this.dir, 'ERRORS'));
+  }
+
+  async writeToFile(message: string, dir = this.dir) {
     try {
-      access(this.dir, async (err) => {
+      access(path.resolve(dir), async (err) => {
         if (err) {
-          await mkdir(path.resolve(this.dir));
+          await mkdir(path.resolve(dir));
         }
       });
 
       await appendFile(
-        path.resolve(this.dir, `${this.fileDate}.log`),
+        path.resolve(dir, `${this.fileDate}.log`),
         `\n${message}`,
       );
     } catch (e) {

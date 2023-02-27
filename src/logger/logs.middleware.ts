@@ -4,7 +4,7 @@ import { CustomLogger } from './logs.service';
 
 @Injectable()
 class LogsMiddleware implements NestMiddleware {
-  private readonly logger = new CustomLogger();
+  constructor(private logger: CustomLogger) {}
 
   use(request: Request, response: Response, next: NextFunction) {
     response.on('finish', () => {
