@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { access } from 'fs';
-import { mkdir, appendFile } from 'fs/promises';
+import { mkdir, appendFile, stat } from 'fs/promises';
 import * as path from 'path';
 
 export class FilesService {
@@ -31,6 +31,18 @@ export class FilesService {
         path.resolve(dir, `${this.fileDate}.log`),
         `\n${message}`,
       );
+
+      try {
+        const fileStats = await stat(path.resolve(dir, `${this.fileDate}.log`));
+        if (fileStats.size > +process.env.LOG_FILE_MAX_SIZE) {
+          this.getCurrentDateString();
+        }
+      } catch (e) {
+        throw new HttpException(
+          'Error reading log file',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     } catch (e) {
       throw new HttpException(
         'Error writing log file',
