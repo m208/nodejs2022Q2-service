@@ -6,6 +6,7 @@ import * as fs from 'fs';
 import * as path from 'node:path';
 import * as YAML from 'json-to-pretty-yaml';
 import { CustomExceptionFilter } from './logger/exception.filter';
+import { CustomLogger } from './logger/logs.service';
 
 const PORT = process.env.PORT || 4000;
 
@@ -33,6 +34,21 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new CustomExceptionFilter());
 
+  listenErrors();
+
   await app.listen(PORT);
 }
 bootstrap();
+
+function listenErrors() {
+  const logger = new CustomLogger();
+
+  process.on('uncaughtExceptionMonitor', () => {
+    logger.error('There was an uncaught error');
+    process.exit(1);
+  });
+
+  process.on('unhandledRejection', () => {
+    logger.error('There was an unhandled promise rejection');
+  });
+}
