@@ -1,9 +1,11 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { access } from 'fs';
-import { mkdir, appendFile, stat } from 'fs/promises';
+import { mkdir, appendFile } from 'fs/promises';
+import * as path from 'path';
 
 export class FilesService {
   fileDate: string;
+  dir = './logs';
 
   constructor() {
     this.getCurrentDateString();
@@ -13,28 +15,18 @@ export class FilesService {
     this.fileDate = new Date().toISOString().replace(/:/g, '-');
   }
 
-  async writeToFile(dir: string, message: string) {
+  async writeToFile(message: string) {
     try {
-      access(dir, async (err) => {
+      access(this.dir, async (err) => {
         if (err) {
-          await mkdir('./logs');
+          await mkdir(path.resolve(this.dir));
         }
       });
 
-      const file = `./logs/${this.fileDate}.log`;
-      await appendFile(file, `\n${message}`);
-
-      try {
-        const statsObj = await stat(file);
-        if (statsObj.size > +process.env.LOG_FILE_MAX_SIZE) {
-          this.getCurrentDateString();
-        }
-      } catch (e) {
-        throw new HttpException(
-          'Error reading log file',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
+      await appendFile(
+        path.resolve(this.dir, `${this.fileDate}.log`),
+        `\n${message}`,
+      );
     } catch (e) {
       throw new HttpException(
         'Error writing log file',
