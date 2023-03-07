@@ -28,7 +28,7 @@ export class AuthService {
     const passwordEquals = await bcrypt.compare(dto.password, user.password);
 
     if (user && passwordEquals) {
-      return this.generateToken(user);
+      return this.generateToken(user.login, user.id);
     }
 
     throw new ForbiddenException('Authentication failed');
@@ -42,16 +42,16 @@ export class AuthService {
       const user = this.jwtService.verify(dto.refreshToken, {
         secret: process.env.JWT_SECRET_REFRESH_KEY,
       });
-      return this.generateToken(user);
+      return this.generateToken(user.login, user.userId);
     } catch (e) {
       throw new ForbiddenException('Token is invalid or expired');
     }
   }
 
-  private async generateToken(user: User) {
+  private async generateToken(login: string, id: string) {
     const payload = {
-      login: user.login,
-      userId: user.id,
+      login: login,
+      userId: id,
     };
 
     const accessToken = this.jwtService.sign(payload, {
