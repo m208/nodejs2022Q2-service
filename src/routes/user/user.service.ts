@@ -36,7 +36,7 @@ export class UserService {
     const entry = await this.repository.findOne({ where: { login } });
 
     if (!entry) {
-      throw new NotFoundException('User not found');
+      throw new ForbiddenException('User not found');
     }
     return entry;
   }

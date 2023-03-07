@@ -44,7 +44,7 @@ export class AuthService {
       });
       return this.generateToken(user);
     } catch (e) {
-      throw new UnauthorizedException('Token is invalid or expired');
+      throw new ForbiddenException('Token is invalid or expired');
     }
   }
 
