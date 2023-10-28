@@ -13,12 +13,16 @@ import { AlbumController } from './routes/album/album.controller';
 import { AlbumService } from './routes/album/album.service';
 import { FavoritesService } from './routes/favs/favs.service';
 import { FavoritesController } from './routes/favs/favs.controller';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
+    ScheduleModule.forRoot(),
+    TasksModule,
   ],
   controllers: [
     AppController,
